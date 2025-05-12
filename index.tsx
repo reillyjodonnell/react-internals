@@ -95,37 +95,21 @@ function traverseFiber(fiber: FiberNode, isRoot = false) {
   if (!fiber) return;
 
   if (isRoot) {
-    console.log('Root fiber:', fiber);
     traverseFiber(fiber.child);
     return;
   }
 
   if (fiber.stateNode instanceof HTMLElement) {
     HTMLMap.set(fiber.stateNode, fiber);
-  }
-
-  console.log(
-    `Traversing fiber type "${
-      typeof fiber.type === 'string' ? fiber.type : fiber.type.toString()
-    }"...`
-  );
-
-  if (fiber.flags === Update) {
-    if (!(fiber.stateNode instanceof HTMLElement)) {
-      console.log('Fiber stateNode is not a DOM element');
-      return;
+    if (fiber.flags === Update) {
+      highlightRenderForElement(fiber.stateNode);
     }
-    highlightRenderForElement(fiber.stateNode);
   }
-
-  console.log('Fiber:', fiber);
 
   if (fiber.sibling) {
-    console.log('Traversing sibling fiber...');
     traverseFiber(fiber.sibling);
   }
   if (fiber.child) {
-    console.log('Traversing child fiber...');
     traverseFiber(fiber.child);
   }
 }
